@@ -22,21 +22,63 @@
             }
           },
           {
-            "id": "c67e020cb131bf0d",
+            "id": "ed7456775ca54d94",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4 PrivEsc Lin & Win/1 Windows/4 Appication PrivEsc/Xampp.md",
+                "file": "2 Ports/3 DC (Domain Controller)/Metodología y más/1 Metodología AD.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Xampp"
+              "title": "1 Metodología AD"
+            }
+          },
+          {
+            "id": "4039f4c7fcbfebdb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2 Ports/2 Aplicaciones Web/IIS - Webdav.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "IIS - Webdav"
+            }
+          },
+          {
+            "id": "c5010d6727209d6f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "1 Com Lin & Win/1 Hacking Commands/Reverse Shells.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Reverse Shells"
+            }
+          },
+          {
+            "id": "a3f3f03ccce93948",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "8 Active Directory/2 AD - CRTP/6 Cross Trust Attacks/6 AD CS - ESC.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "6 AD CS - ESC"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -70,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "PowerHunt",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -208,34 +250,34 @@
       "obsidian42-brat:BRAT": false
     }
   },
-  "active": "c67e020cb131bf0d",
+  "active": "a3f3f03ccce93948",
   "lastOpenFiles": [
-    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/1 Token Privileges.md",
-    "4 PrivEsc Lin & Win/1 Windows/4 Appication PrivEsc/Xampp.md",
-    "1 Com Lin & Win/1 Hacking Commands/Transfer.md",
-    "1 Com Lin & Win/1 Hacking Commands/Reverse Shells.md",
-    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/5 WinPEAS.md",
-    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/4 PowerUp.md",
-    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/3 ADCS - Service Misconfigurations.md",
-    "2 Ports/2 Aplicaciones Web/IIS - ODT File.md",
-    "8 Active Directory/2 AD - CRTP/0 Attack Paths Lab/2 Lab Casero.md",
-    "14 Red Teaming IA/0 IA Models/1 Entorno IA.md",
-    "2 Ports/2 Aplicaciones Web/IIS - Web.config.md",
-    "General Hacking/01 Footprinting and Reconnaissance/8 Deep and Dark web Searching.md",
-    "7 Hacking Web/2 Intermediate/22 File Uploads/1 Ejecución remota con web shell subida.md",
-    "7 Hacking Web/1 Basic/18 Abuso Subida Archivos.md",
-    "2.1 Tools/Fuzzers.md",
-    "2 Ports/4 Windows - Linux/2 Web Services/80 - HTTP.md",
-    "2 Ports/4 Windows - Linux/5 Database/5432 PostgreSQL.md",
-    "4 PrivEsc Lin & Win/2 Linux/3 Escalation/4 SUID.md",
-    "4 PrivEsc Lin & Win/2 Linux/3 Escalation/3 Grupos especiales.md",
-    "2 Ports/4 Windows - Linux/5 Database/3306 - MYSQL.md",
-    "2 Ports/4 Windows - Linux/5 Database/1433 - MSSQL.md",
-    "1 Com Lin & Win/1 Hacking Commands/1 Linux Commands.md",
-    "2.1 Tools/Metasploit/1 Metasploit.md",
-    "General Hacking/02 Scanning Networks/5 Scanning Tools.md",
-    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Kali/WriteProperty - msDS-KeyCredentialLink.md",
+    "8 Active Directory/2 AD - CRTP/1 Offensive PowerShell and .NET tradecraft/1 Powershell.md",
+    "8 Active Directory/2 AD - CRTP/2 Domain Enumeration/1 Enumeration Tools.md",
+    "8 Active Directory/2 AD - CRTP/6 Cross Trust Attacks/6 AD CS - ESC.md",
+    "8 Active Directory/2 AD - CRTP/6 Cross Trust Attacks/3 Across Attacks - Trust Key Abuse - DC.md",
+    "8 Active Directory/2 AD - CRTP/6 Cross Trust Attacks/5 Across Domain Trust - AD CS.md",
+    "5 Pivoting/2 Ligolo.md",
+    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Windows/AddSelf - Group.md",
+    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Windows/ForceChangePassword - User.md",
     "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Windows/GenericAll - Group.md",
+    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Windows/WriteOwner - User.md",
+    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Kali/ForceChangePassword - User.md",
+    "8 Active Directory/2 AD - CRTP/4 Lateral Movement/4 Mimikatz - OPTH - PTH.md",
+    "8 Active Directory/2 AD - CRTP/1 Offensive PowerShell and .NET tradecraft/4 Transferir archivos.md",
+    "8 Active Directory/2 AD - CRTP/1 Offensive PowerShell and .NET tradecraft/2 Bypass - AMSI.md",
+    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Windows/GenericWrite - Computer.md",
+    "4 PrivEsc Lin & Win/1 Windows/3 Escalation/DC - ACL - Windows/GenericWrite PC.md",
+    "8 Active Directory/2 AD - CRTP/4 Lateral Movement/2 Remoting & Tradecraft.md",
+    "8 Active Directory/2 AD - CRTP/4 Lateral Movement/3 Credential Extraction.md",
+    "8 Active Directory/1 AD - Spartan/1 Enumeration/5 BloodHound.md",
+    "8 Active Directory/2 AD - CRTP/1 Offensive PowerShell and .NET tradecraft/1.1 ADModule.md",
+    "1 Com Lin & Win/1 Hacking Commands/Reverse Shells.md",
+    "8 Active Directory/2 AD - CRTP/2 Domain Enumeration/5 Trusts.md",
+    "8 Active Directory/2 AD - CRTP/2 Domain Enumeration/4 GPOs.md",
+    "8 Active Directory/2 AD - CRTP/1 Offensive PowerShell and .NET tradecraft/5 Revershell.md",
+    "8 Active Directory/2 AD - CRTP/1 Offensive PowerShell and .NET tradecraft/3 .NET - Obfuscation.md",
+    "8 Active Directory/2 AD - CRTP/0 Introduction to AD/3 Funcionamiento Kerberos.md",
     "Pasted image 20260825133926.png",
     "4 PrivEsc Lin & Win/2 Linux/2 Mov Lateral",
     "4 PrivEsc Lin & Win/1 Windows/2 Mov Lateral",
