@@ -18,6 +18,7 @@ El pivoting puede ser utilizado para superar restricciones de seguridad que de o
 
 # Deshabilitar Windows Firewall (requiere High integrity / SYSTEM)
 ❯ netsh advfirewall set allprofiles state off
+
 # Deshabilita los 3 perfiles: Domain, Private y Public
 # Necesario cuando el agente de Ligolo no logra conectar al proxy de Kali
 # por reglas de firewall que bloquean la conexión saliente
@@ -28,6 +29,9 @@ El pivoting puede ser utilizado para superar restricciones de seguridad que de o
 ❯ Set-MpPreference -DisableRealtimeMonitoring $true 
 ❯ Set-MpPreference -DisableScriptScanning $true 
 ❯ Set-MpPreference -DisableIOAVProtection $true
+
+# Comprobaar el estado de Windows Defender 
+❯ Get-MpComputerStatus | select RealTimeProtectionEnabled, AMSIEnabled
 
 ❯ sc query windefend
 # Estado de Windows Defender
