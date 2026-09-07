@@ -12,6 +12,21 @@ Flujo:
 	5. SharpView → Confirmar de forma sigilosa (Confirmar ACLs antes de abusar)
 ```
 
+
+## Iniciar sesión con otro usuario en Powershell 
+```powershell 
+❯ whoami    # Conocer el nombre de la máquina 
+
+# Paso 1: Crear variable de contraseña segura
+❯ $passwd = ConvertTo-SecureString 'P@ssWord123!' -AsPlainText -Force
+
+# Paso 2: Crear objeto de credenciales
+❯ $creds = New-Object System.Management.Automation.PSCredential ('PC_name\admin', $passwd)
+
+# Paso 3: Conectar a máquina remota (Enter-PSSession)
+❯ Enter-PSSession -ComputerName PC_name -Credential $creds
+```
+
 ## Powershell Module (ActiveDirectory Module)
 
 * [PowerShell AD Module](https://learn.microsoft.com/en-us/powershell/module/activedirectory/?view=windowsserver2025-ps)
@@ -77,7 +92,7 @@ Ejemplo típico:
 ❯ Get-ADGroupMember -Identity "Domain Admins" -Recursive    # Obtener todos los miembros del grupo "Domain Admins"
 ❯ Get-ADPrincipalGroupMembership -Identity user1            # Obtener el 'group membership' de un usuario
 
-❯ Find-DomainShare -CheckShareAccess       # Buscar shares accesibles en el dominio 
+
 ```
 
 ## PowerView  
@@ -161,6 +176,8 @@ Ejemplos de preguntas que responde:
 
 ❯ Get-DomainGroupMember -Identity "Domain Admins" -Recurse      # Obtener la info y los miembros del grupo "Domain Admins"
 ❯ Get-DomainGroup -UserName "student1"     # Obtener el 'group membership' de un usuario
+
+❯ Find-DomainShare -CheckShareAccess       # Buscar shares accesibles en el dominio 
 ```
 
 ### Enumeración del dominio Local 
@@ -208,26 +225,41 @@ Ejemplo típico:
 ```
 
 ```powershell 
-❯ Import-Module C:\AD\PowerHuntShares.psm1        # Importar el módulo  
+❯ Import-Module PowerHuntShares.psm1        # Importar el módulo  
 ```
 
 ```powershell 
-❯ Get-DomainComputer | select -ExpandProperty dnshostname   # Obtener los equipos del dominio, despues guardarlos en un archivo llamada 'servers.txt'
-❯ Get-DomainComputer |
-Where-Object {$_.dnshostname -notlike "*-dc*"} |
-Select-Object -ExpandProperty dnshostname > C:\AD\servers.txt      # Filtrado 
-❯ Get-DomainComputer |
-Where-Object {$_.useraccountcontrol -notmatch "SERVER_TRUST_ACCOUNT"} |
-Select-Object -ExpandProperty dnshostname > C:\AD\servers.txt      # Mejor filtro 
-
-
-❯ Invoke-HuntSMBShares -NoPing -OutputDirectory C:\AD\ -HostList C:\AD\servers.txt 
-
-
+❯ Invoke-HuntSMBShares -NoPing -OutputDirectory C:\Users\user\ -HostList C:\Users\user\servers.txt 
 
 Donde:
 	- Si no se remueven los DCs en el archivo 'servers.txt' este será muy ruidoso ya que vas a generar tráfico SMB innecesario hacia el servidor más monitoreado del dominio. 
 	- El reporte también incluye 'ShareGraph', que puede usarse para explorar las relaciones de recursos compartidos en tu máquina host (no en la VM del estudiante).
+```
+
+```powershell 
+# Escaneo completo (enumera TODO el dominio) <-- Mejor opción 
+❯ Invoke-HuntSMBShares -Threads 100 -OutputDirectory C:\Users\user\Desktop
+```
+
+```powershell 
+# Escanear tu propio equipo 
+❯ $env:COMPUTERNAME | Out-File C:\Users\user\myserver.txt
+❯ Invoke-HuntSMBShares -NoPing -OutputDirectory C:\Users\user\ -HostList C:\Users\user\myserver.txt 
+```
+
+## PowerView 
+```powershell 
+❯ Get-DomainComputer | select -ExpandProperty dnshostname   # Obtener los equipos del dominio, despues guardarlos en un archivo llamada 'servers.txt'
+
+❯ Get-DomainComputer |
+Where-Object {$_.dnshostname -notlike "*-dc*"} |
+Select-Object -ExpandProperty dnshostname > C:\Users\user\servers.txt      
+# Filtrado 
+
+❯ Get-DomainComputer |
+Where-Object {$_.useraccountcontrol -notmatch "SERVER_TRUST_ACCOUNT"} |
+Select-Object -ExpandProperty dnshostname > C:\Users\user\servers.txt      
+# Mejor filtro 
 ```
 
 ## SharpView
