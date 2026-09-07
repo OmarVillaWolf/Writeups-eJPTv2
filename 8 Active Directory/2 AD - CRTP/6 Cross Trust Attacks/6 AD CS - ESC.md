@@ -254,6 +254,12 @@ Paso 7 (Abusar de la forma 1):
 ### Escalación a EA
 
 ```powershell 
+# Usando PowerView
+# Desde el DC conocer los usuarios Admins del dominio padre 
+❯ Get-DomainGroupMember -Identity "Domain Admins" -Domain moneycorp.local
+```
+
+```powershell 
 ! Usuario: Usuario de dominio con certificado de agente (esc3agent.pfx)
 
 Paso 2 (Abusar de la forma 2):
