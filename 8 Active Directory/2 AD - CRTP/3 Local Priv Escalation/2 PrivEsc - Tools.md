@@ -2,6 +2,12 @@
 
 Tags: #AD #Windows #Powershell #PrivEsc #PowerUp #WinPeas #PowerSploit #FirewallOff 
 
+## Una vez siendo Admin desactivar Protección (Firewall)
+
+```powershell 
+❯ netsh advfirewall set allprofiles state off
+```
+
 ## PowerUP
 
 * [PowerUp](https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1)
@@ -90,8 +96,3 @@ NOTA: Requiere cerrar sesión y volver a autenticarse para que sean asignados lo
 ❯ winPEASx64.exe    
 ```
 
-## Una vez siendo Admin desactivar Protección (Firewall)
-
-```powershell 
-❯ netsh advfirewall set allprofiles state off
-```
