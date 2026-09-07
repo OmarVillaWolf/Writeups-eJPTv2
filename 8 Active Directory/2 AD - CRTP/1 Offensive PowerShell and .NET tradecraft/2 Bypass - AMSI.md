@@ -51,6 +51,13 @@ Nota:
 	1. Escribir 'Exit' desde la nueva sesión de Powershell para limpiar la consola 
 ```
 
+```bash 
+Funciona bien!!
+# Desactiva temporalmente la política de ejecución de PowerShell en el proceso actual, permitiendo ejecutar scripts no firmados sin restricciones
+
+❯ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process  
+```
+
 ## Bypassing AV Signatures for Powershell 
 
 * [AMSITrigger](https://github.com/RythmStick/AMSITrigger)
@@ -68,8 +75,7 @@ Nota:
 ❯ .\DefenderCheck.exe PowerUp.ps1
 
 
-
-Nota:
+NOTA:
 	1. Si quieres ofuscar el 'PowerUp.ps1' ir a la linea '2640' y eliminar el contenido de la variable '$B64Binary = ""'
 ```
 
