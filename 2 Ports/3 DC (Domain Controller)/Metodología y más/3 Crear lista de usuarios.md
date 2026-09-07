@@ -18,6 +18,8 @@ Hugo Bear
 
 ## 2. Generar usuarios
 
+* [Username-Anarchy](https://github.com/urbanadventurer/username-anarchy)
+
 ```bash
 ./username-anarchy --input-file fullNames.txt --select-format flast,first.last,firstlast,firstl,f.last,last.first,lfirst,lastf,last,first,fmlast,firstmiddlelast > usernames.txt
 ```
